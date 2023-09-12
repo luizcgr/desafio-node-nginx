@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    image: luizcgr/nodejs
+    depends_on:
+      - app
+      - mysql
+    networks:
+      - nodenet
+    ports:
+      - "8080:80"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    image: luizcgr/nodeapp
+    container_name: nodeapp
+    entrypoint: wait-for-it mysql:3306 --strict --timeout=20 -- node /app/app.js
+    depends_on:
+      - mysql
+    networks:
+      - nodenet
+    tty: true
+    ports:
+      - "3000:3000"
+
+  mysql:
+    image: mysql:8.1.0
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=nodedb
+    ports:
+      - "3306:3306"
+    networks:
+      - nodenet
+    restart: always
+
+networks:
+  nodenet:
+    driver: bridge

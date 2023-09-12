@@ -1,0 +1,10 @@
+FROM node:18.15.0
+
+RUN apt-get update && apt-get install wait-for-it -y
+WORKDIR /app
+COPY ./app.js .
+COPY ./package.json .
+RUN npm install
+EXPOSE 3000
+
+ENTRYPOINT [ "node", "app.js" ]
