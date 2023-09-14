@@ -1,19 +1,7 @@
 # Executar o docker sem o docker
 
-## Construindo a imagem
-
 ```sh
-docker build -t luizcgr/devcontainer . -f Dockerfile
-```
-
-## Subindo o container
-
-```sh
-
-```
-
-## Executando o código de dentro do container
-
-```sh
-
+docker run --rm -it --name nodedev -v ./:/usr/src/app -p 3000:3000 node:18 bash
+cd /usr/src/app
+node fullcycle.js
 ```
